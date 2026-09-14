@@ -4,8 +4,8 @@
   "description": "online coding plateform",
   "main": "Index.js",
   "scripts": {
-    "start": "node Index.js",
-    "dev": "nodemon Index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "coding",
