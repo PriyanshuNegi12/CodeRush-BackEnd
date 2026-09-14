@@ -37,7 +37,12 @@ const userRegister = async (req,res)=>{
             _id:user._id,
             role:user.role
         }
-        res.cookie('token',token,{maxAge:60*60*1000});
+        res.cookie('token',token,{
+            httpOnly: true,
+            secure: true,           // required for HTTPS
+            sameSite: 'none',
+            maxAge:60*60*1000
+        });
         res.status(201).json({
             user:reply,
             message:"Login Successfully"
@@ -65,7 +70,12 @@ const userLogin = async (req,res)=>{
             role:user.role
         }
         const token = jwt.sign({_id:user._id ,role:user.role, emailId:emailId}, process.env.JWT_KEY,{expiresIn:60*60});
-        res.cookie('token',token,{maxAge:60*60*1000});
+        res.cookie('token',token,{
+            httpOnly: true,
+            secure: true,           // required for HTTPS
+            sameSite: 'none',
+            maxAge:60*60*1000
+        });
         res.status(200).json({
             user:reply,
             message:"Login Successfully"
@@ -82,7 +92,12 @@ const userLogout = async (req, res)=>{
         const payload = jwt.decode(token);
         await client.set(`token:${token}`, 'blocked');
         await client.expireAt(`token:${token}`, payload.exp);
-        res.cookie("token", "" , {expires: new Date(Date.now())});
+        res.cookie("token", "" , {
+            httpOnly: true,
+            secure: true,           // required for HTTPS
+            sameSite: 'none',
+            expires: new Date(Date.now())
+        });
         res.send("Logged Out Successfull");
         
     } catch (err) {
