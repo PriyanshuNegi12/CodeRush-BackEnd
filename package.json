@@ -4,7 +4,8 @@
   "description": "online coding plateform",
   "main": "Index.js",
   "scripts": {
-    "test": "npm test"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "coding",
