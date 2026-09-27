@@ -13,37 +13,25 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_APP_PASSWORD,
   },
+  connectionTimeout: 10000, // 10s to establish connection
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
-
 
 async function generateOTP(data) {
-    const otp = createOTP();
+  const otp = createOTP();
+  try {
     await transporter.sendMail({
-    from: `"CodeRush" <${process.env.EMAIL_USER}>`,
-    to: data.emailId,
-    subject: "Your CodeRush Verification Code",
-    text: `
-Dear User,
-
-We received a request to verify the email address associated with your CodeRush account.
-
-Your verification code is:
-
-${otp}
-
-This verification code is valid for 5 minutes and can be used only once.
-
-For your security, please do not share this code with anyone. CodeRush will never ask you to disclose your verification code or password.
-
-If you did not request this verification code, no further action is required. You may safely ignore this email.
-
-This is an automated message. Please do not reply to this email.
-
-Regards,
-CodeRush Team
-`
-});
-return otp;
+      from: `"CodeRush" <${process.env.EMAIL_USER}>`,
+      to: data.emailId,
+      subject: "Your CodeRush Verification Code",
+      text: `...`,
+    });
+  } catch (err) {
+    console.error("[generateOTP] sendMail failed:", err.message);
+    throw new Error("Failed to send verification email. Please try again.");
+  }
+  return otp;
 }
 
 async function validateOTP(data) {
