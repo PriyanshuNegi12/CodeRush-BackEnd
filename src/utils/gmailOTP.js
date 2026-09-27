@@ -16,7 +16,7 @@ async function generateOTP(data) {
         "Accept": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "CodeRush", email: "coderush-prynsu@business.com" },
+        sender: { name: "CodeRush", email: process.env.EMAIL_USER },
         to: [{ email: data.emailId }],
         subject: "Your CodeRush Verification Code",
         textContent: `Dear User,
