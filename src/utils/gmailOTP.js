@@ -8,17 +8,18 @@ function createOTP() {
 async function generateOTP(data) {
   const otp = createOTP();
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+        "api-key": process.env.BREVO_API_KEY,
         "Content-Type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify({
-        from: "CodeRush <onboarding@resend.dev>",
-        to: data.emailId,
+        sender: { name: "CodeRush", email: "coderush-prynsu@business.com" },
+        to: [{ email: data.emailId }],
         subject: "Your CodeRush Verification Code",
-        text: `Dear User,
+        textContent: `Dear User,
 
 We received a request to verify the email address associated with your CodeRush account.
 
@@ -41,7 +42,7 @@ CodeRush Team`,
 
     if (!res.ok) {
       const errBody = await res.text();
-      console.error("[generateOTP] Resend failed:", res.status, errBody);
+      console.error("[generateOTP] Brevo failed:", res.status, errBody);
       throw new Error("Failed to send verification email. Please try again.");
     }
   } catch (err) {
